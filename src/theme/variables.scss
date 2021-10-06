@@ -1,0 +1,171 @@
+// Ionic Variables and Theming. For more info, please see:
+// http://ionicframework.com/docs/theming/
+/** Ionic CSS Variables **/
+@import '~@swimlane/ngx-datatable/index.css';
+@import '~@swimlane/ngx-datatable/themes/material.css';
+@import '~@swimlane/ngx-datatable/assets/icons.css';
+@import '~swiper/swiper';
+
+ion-split-pane {
+  --side-min-width: 15%;
+  --side-max-width: 30%;
+  --side-width: 15%;
+}
+
+ion-content {}
+
+:root {
+  --ion-background-color: #f4f3ef;
+  --ion-font-family: "Montserrat-Light";
+  --ion-card-background: white;
+  --ion-color-casper: #E1372D;
+  --ion-color-casper-rgb: 225,55,45;
+  --ion-color-casper-contrast: #ffffff;
+  --ion-color-casper-contrast-rgb: 255,255,255;
+  --ion-color-casper-shade: #c63028;
+  --ion-color-casper-tint: #e44b42;
+  --ion-item-background: transparent;
+  --ion-item-border-color: transparent;
+  font-size: 1rem;
+}
+
+.ion-color-casper {
+  --ion-color-base: var(--ion-color-casper);
+  --ion-color-base-rgb: var(--ion-color-casper-rgb);
+  --ion-color-contrast: var(--ion-color-casper-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-casper-contrast-rgb);
+  --ion-color-shade: var(--ion-color-casper-shade);
+  --ion-color-tint: var(--ion-color-casper-tint);
+}
+
+ion-menu {
+  --ion-background-color: #f8f9fa;
+}
+
+ion-toolbar {
+  fa-icon {
+    font-size: 20px;
+  }
+}
+
+body {}
+
+ion-header {
+  ion-title {
+    color: #66615B !important;
+    font-weight: bold;
+  }
+}
+
+a {
+  color: #51cbce !important;
+  text-decoration: none !important;
+}
+
+a:hover {
+  text-decoration: underline !important;
+}
+
+ion-card-title {
+  font-size: 27px;
+}
+
+.ngx-datatable.bootstrap:not(.cell-selection) .datatable-body-row:hover,
+.ngx-datatable.material:not(.cell-selection) .datatable-body-row:hover .datatable-row-group {
+  background: #51cbce;
+  color: #66615B;
+}
+
+.ngx-datatable.datatable-footer.datatable-pager.pager,
+.ngx-datatable.datatable-footer.datatable-pager.pager li {
+  font-size: 20px !important;
+  line-height: 20px !important;
+  padding: 0 3px !important;
+  color: red !important;
+}
+
+datatable-body-cell {
+  margin-top: 13px;
+  font-size: 16px;
+}
+
+.datatable-header-cell {
+  color: #51cbce !important;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.datatable-scroll {
+  width: unset!important;
+}
+/**
+ * Footer Styles
+ */
+// colors for footer elements
+$datatable-footer-cell-color: rgba(0, 0, 0, 0.54) !default;
+$datatable-footer-border-top-color: rgba(0, 0, 0, 0.12) !default;
+$datatable-pager-color: rgba(0, 0, 0, 0.54) !default;
+$datatable-pager-color-hover: rgba(0, 0, 0, 0.75) !default;
+$datatable-pager-background-hover: rgba(158, 158, 158, 0.2) !default;
+$datatable-pager-disabled-color: rgba(0, 0, 0, 0.26) !default;
+$datatable-pager-disabled-background: transparent !default;
+$datatable-pager-active-background: rgba(158, 158, 158, 0.2) !default;
+
+.datatable-footer {
+  border-top: 1px solid $datatable-footer-border-top-color;
+  font-size: 12px;
+  font-weight: 400;
+  color: $datatable-footer-cell-color;
+
+  .page-count {
+    line-height: 50px;
+    height: 50px;
+    padding: 0 1.2rem;
+  }
+
+  .datatable-pager {
+    margin: 0 5px;
+
+    li {
+      vertical-align: middle;
+
+      &.disabled a {
+        color: $datatable-pager-disabled-color !important;
+        background-color: $datatable-pager-disabled-background !important;
+      }
+
+      &.active a {
+        background-color: $datatable-pager-active-background;
+        font-weight: bold;
+      }
+    }
+
+    a {
+      height: 22px;
+      min-width: 24px;
+      line-height: 22px;
+      padding: 0 6px;
+      border-radius: 3px;
+      margin: 6px 3px;
+      text-align: center;
+      vertical-align: top;
+      color: $datatable-pager-color;
+      text-decoration: none;
+      vertical-align: bottom;
+
+      &:hover {
+        color: $datatable-pager-color-hover;
+        background-color: $datatable-pager-background-hover;
+      }
+    }
+
+    .datatable-icon-left,
+    .datatable-icon-prev,
+    .datatable-icon-right,
+    .datatable-icon-skip {
+      font-size: 20px;
+      line-height: 20px;
+      padding: 0 3px;
+    }
+  }
+}

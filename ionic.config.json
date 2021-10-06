@@ -1,0 +1,8 @@
+{
+  "name": "CasperApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "71c55430"
+}

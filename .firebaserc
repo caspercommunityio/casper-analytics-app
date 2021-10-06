@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "caspercommunitywebnotif": {
+      "hosting": {
+        "app": [
+          "caspercommunitywebnotif"
+        ]
+      }
+    }
+  }
+}

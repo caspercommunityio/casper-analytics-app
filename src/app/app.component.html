@@ -1,0 +1,28 @@
+<ion-app>
+  <ion-split-pane contentId="main-content" [when]="'md'">
+    <ion-menu id="main-menu" contentId="main-content" type="overlay">
+      <ion-content>
+        <ion-list id="inbox-list" style="text-align:center">
+          <a href="/"><img width="100px" src="../assets/icon/icon.png" [class.paddingTopMobile]="ios"/></a><br />
+          <ion-label style="font-size:20px">{{selectedValidator.substr(0,5)}}...{{selectedValidator.substr(-5)}}</ion-label>
+          <ion-list-header style="margin:0;padding:0 ;flex-direction: column;border-bottom: 1px solid lightgray;    align-items: center;">
+            <ion-button fill="outline" size="small" shape="round" color="casper" href="https://cspr.live/validator/{{selectedValidator}}" target="_blank">
+              Stake with us
+            </ion-button>
+          </ion-list-header>
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
+            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected-menu">
+              <ion-img src="../assets/casper-30x30.png" style="width:12px;margin-right:5px"></ion-img>
+              <ion-label>{{ p.title }}</ion-label>
+              <div class="triangle">
+              </div>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="main-content">
+    </ion-router-outlet>
+
+  </ion-split-pane>
+</ion-app>

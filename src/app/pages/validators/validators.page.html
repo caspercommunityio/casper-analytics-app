@@ -1,0 +1,357 @@
+<ngx-spinner></ngx-spinner>
+<ion-header>
+  <ion-toolbar>
+    <ion-img slot="start" src="../assets/icon/icon.png" style="width: 40px;margin-left: 15px;"></ion-img>
+    <ion-title>Casper Analytics</ion-title>
+    <ion-buttons slot="end">
+      <ion-segment *ngIf="!android && !ios" color="casper" [(ngModel)]="casperEnvironment" (ionChange)="changeEnvironment($event)">
+        <ion-segment-button value="mainnet">
+          <ion-label>Mainnet</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="testnet">
+          <ion-label>Testnet</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+
+      <ion-button color="casper" routerLink="/notifications">
+        <fa-icon icon="bell" slot="icon-only" name="person-circle">
+        </fa-icon>
+      </ion-button>
+
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="android || ios">
+    <ion-segment color="casper" [(ngModel)]="casperEnvironment" (ionChange)="changeEnvironment($event)">
+      <ion-segment-button value="mainnet">
+        <ion-label>Mainnet</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="testnet">
+        <ion-label>Testnet</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div #map id="map" style="height:300px">
+  </div>
+
+  <ion-grid *ngIf="validators !== undefined && validators.infos !== undefined ">
+    <ion-row>
+
+      <swiper style="width:100%" *ngIf="validators !== undefined && validators.infos !== undefined " pager="false" [config]="slideSupplyOptions">
+        <ng-template swiperSlide>
+          <app-bloc-info name="Total Supply" [value]="validators.infos.totalSupply | number:'1.0-0':'fr'" icon="chart-line" iconColor="#30336b" info=" Current Supply"></app-bloc-info>
+        </ng-template>
+        <ng-template swiperSlide>
+          <app-bloc-info name="Total CSPR Staked" [value]="validators.infos.totalCsprStaked | number:'1.0-0':'fr'" icon="chart-area" iconColor="#95afc0" [info]="'At era '+validators.infos.era"></app-bloc-info>
+        </ng-template>
+        <ng-template swiperSlide>
+          <app-bloc-info name="Actual Circ. Supply" [value]="validators.infos.totalCirculatingSupply | number:'1.0-0':'fr'" icon="chart-bar" iconColor="#be2edd" info="Current circulating supply"></app-bloc-info>
+        </ng-template>
+      </swiper>
+
+      <swiper *ngIf="globalsCharts !== undefined && globalsCharts.transfers !== undefined " pager="false" [config]="slideInfosOptions">
+        <ng-template swiperSlide>
+          <app-chart-info name="Transfers" [data]="globalsCharts.transfers.values" color="#30336b" unit="Transfers">
+          </app-chart-info>
+        </ng-template>
+        <ng-template swiperSlide>
+          <app-chart-info name="Deploys" [data]="globalsCharts.deploys.values" color="#FDA7DF" unit="Deploys">
+          </app-chart-info>
+        </ng-template>
+        <ng-template swiperSlide>
+          <app-chart-info name="APY" [data]="globalsCharts.apy.values" color="#ef8157" unit="%">
+          </app-chart-info>
+        </ng-template>
+        <ng-template swiperSlide>
+          <app-chart-info name="Delegations" [data]="globalsCharts.delegations.values" color="#95afc0" unit="Deleg.">
+          </app-chart-info>
+        </ng-template>
+        <ng-template swiperSlide>
+          <app-chart-info name="Undelegations" [data]="globalsCharts.undelegations.values" color="#51cbce" unit="Undeleg.">
+          </app-chart-info>
+        </ng-template>
+      </swiper>
+
+
+      <swiper *ngIf="validators !== undefined && validators.infos !== undefined " pager="false" [config]="slideInfosOptions">
+        <ng-template swiperSlide>
+          <app-bloc-info style="width:100%" name="Lowest Fees" [value]="validators.infos.lowestDelegationRate" icon="sort-numeric-up" iconColor="#badc58" info="Click to show details"></app-bloc-info>
+        </ng-template>
+        <ng-template swiperSlide>
+          <app-bloc-info style="width:100%" name="Higesht Delegators 7d" [value]="validators.infos.highestDelegators" icon="users" iconColor="#fbc658" info="Click to show details"></app-bloc-info>
+        </ng-template>
+        <ng-template swiperSlide>
+          <app-bloc-info style="width:100%" name="Highest Delegations 7d" [value]="validators.infos.highestDelegations" icon="list-ul" iconColor="#ef8157" info="Click to show details"></app-bloc-info>
+        </ng-template>
+        <ng-template swiperSlide>
+          <app-bloc-info style="width:100%" name="Random Validator" [value]="validators.infos.randomValidator" icon="random" iconColor="#51cbce" info="Click to show details"></app-bloc-info>
+        </ng-template>
+        <ng-template swiperSlide *ngFor="let f of favorites | keyvalue">
+          <app-bloc-info style="width:100%" name="Favorite {{f.key}}" [value]="f.value" icon="star" iconColor="#FDA7DF" info="Click on your favorite"></app-bloc-info>
+        </ng-template>
+      </swiper>
+
+    </ion-row>
+
+    <ion-row>
+
+      <ion-col>
+
+        <ion-card>
+          <ion-card-header>
+            <!-- <ion-card-title role="heading" aria-level="2" class="ion-inherit-color ios hydrated">All Active Validators</ion-card-title> -->
+            <ion-segment color="casper" mode="md" [(ngModel)]="selectedTab" style="justify-content:left">
+              <ion-segment-button value="validators">
+                <ion-label>Active Validators</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="holders">
+                <ion-label>Holders</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+          </ion-card-header>
+          <ion-card-content *ngIf="selectedTab == 'holders' && holdersRows !==undefined;" class="card-content">
+            <div>
+              <ion-searchbar inputmode="search" mode="ios" (ionChange)="filterHoldersList($event)"></ion-searchbar>
+
+              <ngx-datatable class="bootstrap" [headerHeight]="30" [scrollbarH]="true" [scrollbarV]="false" [virtualization]="false" [rowHeight]="80" [footerHeight]="50" [rows]="holdersRows" [columnMode]="'force'" [externalPaging]="true" [count]="holdersPage.totalElements"
+                [offset]="holdersPage.pageNumber" [limit]="holdersPage.size" (page)="getHolders($event)">
+
+                <ngx-datatable-column name="#" prop="position" [width]="100">
+                  <ng-template ngx-datatable-header-template let-column="column">
+                    <span title="Tooltip">
+              {{column.name}}
+              </span>
+                  </ng-template>
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <div>
+                      {{value}}
+                    </div>
+                  </ng-template>
+
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Public Key" prop="publicKey" [width]="700">
+                  <ng-template ngx-datatable-header-template let-column="column">
+                    <span title="Tooltip">
+              {{column.name}}
+              </span>
+                  </ng-template>
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <div>
+                      <a href="https://cspr.live/account/{{value}}" target="_blank">{{value}}</a>
+                    </div>
+                  </ng-template>
+
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Staking" prop="staking" [width]="250">
+                  <ng-template ngx-datatable-header-template let-column="column">
+                    <span title="Tooltip">
+              {{column.name}}
+              </span>
+                  </ng-template>
+                  <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                    <div>
+                      {{value | number:'1.2-2':'fr'}} CSPR
+                    </div>
+                    <small style="color:gray">{{row.staking_price | number:'1.2-2':'fr'}}$</small>
+                  </ng-template>
+
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Balance" prop="balance" [width]="250">
+                  <ng-template ngx-datatable-header-template let-column="column">
+                    <span title="Tooltip">
+              {{column.name}}
+              </span>
+                  </ng-template>
+                  <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                    <div>
+                      {{value| number:'1.2-2':'fr'}} CSPR
+                    </div>
+                    <small style="color:gray">{{row.balance_price | number:'1.2-2':'fr'}}$</small>
+                  </ng-template>
+
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Total" prop="total" [width]="250">
+                  <ng-template ngx-datatable-header-template let-column="column">
+                    <span title="Tooltip">
+              {{column.name}}
+              </span>
+                  </ng-template>
+                  <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                    <div>
+                      {{value| number:'1.2-2':'fr'}} CSPR
+                    </div>
+                    <small style="color:gray">{{row.total_price | number:'1.2-2':'fr'}}$</small>
+                  </ng-template>
+
+                </ngx-datatable-column>
+                <ngx-datatable-column name="% of total supply" prop="percentage" [width]="250">
+                  <ng-template ngx-datatable-header-template let-column="column">
+                    <span title="Tooltip">
+              {{column.name}}
+              </span>
+                  </ng-template>
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <div>
+                      {{value | number:'1.2-2':'fr'}} %
+                    </div>
+                  </ng-template>
+
+                </ngx-datatable-column>
+                <ngx-datatable-footer>
+                  <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize" let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
+                    <div class="page-count">
+                      {{rowCount.toLocaleString()}} Holders
+                    </div>
+                    <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'" [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'" [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize"
+                      [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)" (change)="table.onFooterPage($event)">
+                    </datatable-pager>
+                  </ng-template>
+                </ngx-datatable-footer>
+              </ngx-datatable>
+            </div>
+          </ion-card-content>
+          <ion-card-content *ngIf=" selectedTab == 'validators' && rows !==undefined;" class="card-content">
+            <div>
+              <ion-searchbar inputmode="search" mode="ios" (ionChange)="filterValidatorsList($event)"></ion-searchbar>
+              <ngx-datatable [headerHeight]="30" [scrollbarH]="true" [rowHeight]="70" [footerHeight]="50" class="bootstrap" [limit]="50" [rows]="rows" [columnMode]="'force'" [selectionType]="selectionType" (select)="selectValidator($event)">
+
+
+                <ngx-datatable-column name="#" prop="position" [width]="30">
+                  <ng-template ngx-datatable-header-template let-column="column">
+                    <span title="Tooltip">
+                {{column.name}}
+                </span>
+                  </ng-template>
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <div>
+                      {{value}}
+                    </div>
+                  </ng-template>
+
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Public Key" prop="publicKey" [width]="700">
+                  <ng-template ngx-datatable-header-template let-column="column">
+                    <span title="Tooltip">
+                {{column.name}}
+                </span>
+                  </ng-template>
+                  <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                    <div>
+                      {{value}}<br />
+
+                      <small class="contract-info"><img [src]="row.icon" width="25"/> <span>{{row.name}}</span></small>
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Fees" prop="fees" [width]="80">
+                  <ng-template ngx-datatable-header-template let-column="column">
+                    <span title="Tooltip">
+                {{column.name}}
+                </span>
+                  </ng-template>
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <div>
+                      {{value | number : '1.2-2' : 'fr'}}%
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="CSPR Staked" prop="CSPRStaked">
+                  <ng-template ngx-datatable-header-template let-column="column">
+                    <span title="Tooltip">
+                {{column.name}}
+                </span>
+                  </ng-template>
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <div>
+                      {{value}}
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Delegators" prop="delegators" [width]="90">
+                  <ng-template ngx-datatable-header-template let-column="column">
+                    <span title="Tooltip">
+                {{column.name}}
+                </span>
+                  </ng-template>
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <div>
+                      {{value}}
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+
+
+                <ngx-datatable-column name="APY" prop="APY" [width]="50">
+                  <ng-template ngx-datatable-header-template let-column="column">
+                    <span title="Tooltip">
+                {{column.name}}
+                </span>
+                  </ng-template>
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <div>
+                      {{value | number : '1.2-2' : 'fr'}}%
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Delegators 7d" prop="delegators7d">
+                  <ng-template ngx-datatable-header-template let-column="column">
+                    <span title="Tooltip">
+                {{column.name}}
+                </span>
+                  </ng-template>
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <div>
+                      {{value}}
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Delegations 7d" prop="delegations7d">
+                  <ng-template ngx-datatable-header-template let-column="column">
+                    <span title="Tooltip">
+                {{column.name}}
+                </span>
+                  </ng-template>
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <div>
+                      {{value}}
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Undelegations 7d" prop="undelegations7d">
+                  <ng-template ngx-datatable-header-template let-column="column">
+                    <span title="Tooltip">
+                {{column.name}}
+                </span>
+                  </ng-template>
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <div>
+                      {{value}}
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-footer>
+                  <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize" let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-isVisible="isVisible">
+                    <div class="page-count">
+                      {{rowCount.toLocaleString()}} Validators
+                    </div>
+                    <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'" [pagerRightArrowIcon]="'datatable-icon-right'" [pagerPreviousIcon]="'datatable-icon-prev'" [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize"
+                      [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)" (change)="table.onFooterPage($event)">
+                    </datatable-pager>
+                  </ng-template>
+                </ngx-datatable-footer>
+              </ngx-datatable>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-footer *ngIf="validators !== undefined && validators.infos !== undefined " style="height:50px; text-align:center;display:flex;align-items:center;justify-content:center">
+    <ion-text color="dark">Made with 💖 for the Casper's community | <a href="{{contactUsUrl}}" target="_blank">Contact Us</a></ion-text>
+  </ion-footer>
+</ion-content>

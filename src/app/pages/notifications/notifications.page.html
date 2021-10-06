@@ -1,0 +1,103 @@
+<ngx-spinner [fullScreen]="true"></ngx-spinner>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button color="casper" autoHide="true"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Alerts</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="casper" routerLink="/notifications">
+        <fa-icon icon="bell" slot="icon-only" name="person-circle">
+        </fa-icon>
+      </ion-button>
+      <ion-button color="casper" routerLink="/">
+        <fa-icon icon="home" slot="icon-only" name="person-circle">
+        </fa-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>How it works </ion-card-title>
+            <ion-card-subtitle>
+              <ion-badge [color]="(isNotificationEnabled ? 'success' : 'danger')">{{(isNotificationEnabled ? 'Notifications active' : 'Notifications inactive')}}</ion-badge>
+            </ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  Create an alert and get notified when the conditions are met. <b>Don't forget to allow notifications from this site.</b> <br />
+                  For the moment, this feature works on desktop except on Mac with Safari.<br />
+                  A version of the app will be available on iOS and Android so you can enjoy it on your mobile device.<br />
+                  Feel free to contact us if you have any issue : <a href="https://t.me/Caspercommunity_io" target="_blank">Telegram Channel</a>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col style="text-align:right">
+
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" size-md="3" *ngFor="let r of notifications">
+        <ion-card>
+
+          <ion-card-header [style.background-color]="bgColors[r.condition.function]">
+            <ion-card-title>{{labels[r.condition.function]}}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p style="height:75px;padding-top:15px">
+              {{descriptions[r.condition.function]}}<br />
+              -<br />
+              <small *ngIf="r.condition.parameters.validator">Validator : {{r.condition.parameters.validator.substr(0,5)+'...'+r.condition.parameters.validator.substr(-5)}}</small><br />
+              <small>Last run : {{r.lastExecution}}</small>
+
+            </p>
+            <ion-item>
+              <ion-button slot="end" (click)="editNotification(r)" fill="clear" size="medium" color="dark" style="margin:0">
+                <fa-icon [icon]="['far','edit']" slot="icon-only">
+                </fa-icon>
+              </ion-button>
+              <ion-button slot="end" (click)="deleteNotification(r)" fill="clear" size="medium" color="casper" style="margin:0">
+                <fa-icon icon="trash" slot="icon-only">
+                </fa-icon>
+              </ion-button>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="12" size-md="3">
+        <ion-card>
+          <ion-card-header [style.background-color]="bgColors['new']" [style.color]="'white'">
+            <ion-card-title>Add new Alert</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p style="height:75px;padding-top:15px">
+              Create a new alert. Click on the + button.
+            </p>
+            <ion-item>
+              <ion-button (click)="editNotification({})" slot="end" fill="clear" size="medium" color="casper" style="margin:0" [disabled]="!isNotificationEnabled">
+                <fa-icon icon="plus" slot="icon-only">
+                </fa-icon>
+              </ion-button>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

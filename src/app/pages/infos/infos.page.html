@@ -1,0 +1,116 @@
+<ngx-spinner [fullScreen]="true"></ngx-spinner>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button color="casper" autoHide="true"></ion-menu-button>
+    </ion-buttons>
+    <ion-img *ngIf="validatorInfos  && validatorInfos['contract-info']" slot="start" [src]="getImateSrc(validatorInfos['contract-info'].owner.branding.logo)" style="width: 40px;margin-left: 15px;"></ion-img>
+    <ion-title *ngIf="validatorInfos  && validatorInfos['contract-info']">{{validatorInfos['contract-info'].owner.name}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="casper" routerLink="/notifications">
+        <fa-icon icon="bell" slot="icon-only">
+        </fa-icon>
+      </ion-button>
+      <ion-button color="casper" routerLink="/">
+        <fa-icon icon="home" slot="icon-only">
+        </fa-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div #map id="map" style="height:300px">
+  </div>
+  <ion-grid *ngIf="validatorInfos && validatorInfos['contract-info']">
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>{{validatorInfos['contract-info'].owner.name}}</ion-card-title>
+            <ion-card-subtitle>{{validatorInfos['contract-info'].owner.description}}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item>
+              <ion-label position="stacked">Website</ion-label>
+              <ion-button fill="clear" target="_blank" [href]="validatorInfos['contract-info'].owner.website">{{validatorInfos['contract-info'].owner.website}}</ion-button>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Email</ion-label>
+              <ion-input readonly>{{validatorInfos['contract-info'].owner.email}}</ion-input>
+            </ion-item>
+            <ion-item *ngFor="let o of validatorInfos['contract-info'].nodes">
+              <ion-label position="stacked">Node</ion-label>
+              <ion-input readonly>{{o.public_key}}</ion-input>
+              <small>{{o.description}}</small>
+            </ion-item>
+            <ion-button *ngFor="let o of validatorInfos['contract-info'].owner.resources.other" target="_blank" fill="clear" [href]="o.url">{{o.name}}</ion-button>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="1" *ngIf="validatorInfos['contract-info'].owner.social.github != ''">
+                  <ion-button fill="clear" size="large" color="casper" [href]="'https://github.com/' + validatorInfos['contract-info'].owner.social.github" target="_blank">
+                    <fa-icon [icon]="['fab','github']" slot="icon-only"></fa-icon>
+                  </ion-button>
+                </ion-col>
+                <ion-col size="1" *ngIf="validatorInfos['contract-info'].owner.social.facebook != ''">
+                  <ion-button fill="clear" size="large" color="casper">
+                    <fa-icon [icon]="['fab','facebook']" slot="icon-only"></fa-icon>
+                  </ion-button>
+                </ion-col>
+                <ion-col size="1" *ngIf="validatorInfos['contract-info'].owner.social.twitter != ''">
+                  <ion-button fill="clear" size="large" color="casper" [href]="'https://twitter.com/'+validatorInfos['contract-info'].owner.social.twitter" target="_blank">
+                    <fa-icon [icon]="['fab','twitter']" slot="icon-only"></fa-icon>
+                  </ion-button>
+                </ion-col>
+                <ion-col size="1" *ngIf="validatorInfos['contract-info'].owner.social.medium != ''">
+                  <ion-button fill="clear" size="large" color="casper" [href]="'https://medium.com/'+validatorInfos['contract-info'].owner.social.medium" target="_blank">
+                    <fa-icon [icon]="['fab','medium']" slot="icon-only"></fa-icon>
+                  </ion-button>
+                </ion-col>
+                <ion-col size="1" *ngIf="validatorInfos['contract-info'].owner.social.youtube != ''">
+                  <ion-button fill="clear" size="large" color="casper" [href]="'https://www.youtube.com/channel/channel/'+validatorInfos['contract-info'].owner.social.youtube" target="_blank">
+                    <fa-icon [icon]="['fab','youtube']" slot="icon-only"></fa-icon>
+                  </ion-button>
+                </ion-col>
+                <ion-col size="1" *ngIf="validatorInfos['contract-info'].owner.social.telegram != ''">
+                  <ion-button fill="clear" size="large" color="casper" [href]="'https://t.me/'+validatorInfos['contract-info'].owner.social.telegram" target="_blank">
+                    <fa-icon [icon]="['fab','telegram']" slot="icon-only"></fa-icon>
+                  </ion-button>
+                </ion-col>
+                <ion-col size="1" *ngIf="validatorInfos['contract-info'].owner.social.reddit != ''">
+                  <ion-button fill="clear" size="large" color="casper" [href]="'https://reddit.com/'+validatorInfos['contract-info'].owner.social.reddit" target="_blank">
+                    <fa-icon [icon]="['fab','reddit']" slot="icon-only"></fa-icon>
+                  </ion-button>
+                </ion-col>
+                <ion-col size="1" *ngIf="validatorInfos['contract-info'].owner.social.wechat != ''">
+                  <ion-button fill="clear" size="large" color="casper">
+                    <fa-icon [icon]="['fab','weixin']" slot="icon-only"></fa-icon>
+                  </ion-button>
+                </ion-col>
+                <ion-col size="1" *ngIf="validatorInfos['contract-info'].owner.social.keybase != ''">
+                  <ion-button fill="clear" size="large" color="casper" [href]="'https://keybase.io/'+validatorInfos['contract-info'].owner.social.keybase" target="_blank">
+                    <fa-icon [icon]="['fab','keybase']" slot="icon-only"></fa-icon>
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid *ngIf="validatorInfos !== undefined && validatorInfos['contract-info'] == undefined">
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Validator's infos</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            If there are no informations on this page, you can add these info via the smart contract defined here : <a href="https://github.com/make-software/casper-account-info-contract" target="_blank">https://github.com/make-software/casper-account-info-contract</a>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

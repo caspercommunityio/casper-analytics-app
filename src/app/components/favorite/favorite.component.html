@@ -1,0 +1,4 @@
+<ion-button color="casper" routerLink="/notifications">
+  <fa-icon slot="icon-only" *ngIf="!isAddedToFavorite" [icon]="['far', 'star']" (click)="setAsFavorite()"></fa-icon>
+  <fa-icon slot="icon-only" *ngIf="isAddedToFavorite" [icon]="['fas', 'star']" (click)="setAsFavorite()"></fa-icon>
+</ion-button>

@@ -1,0 +1,53 @@
+.content-row {
+  border-bottom: 1px solid lightgray;
+
+  .col-icon {
+    text-align: center;
+
+    fa-icon {
+      font-size: 4em;
+    }
+  }
+
+  .property {
+    h1 {
+      color: #9A9A9A;
+      font-size: 16px;
+      line-height: 1.4em;
+    }
+  }
+
+  .value {
+    font-size: 1.7em;
+    color: black;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+}
+
+.info-row {
+  padding-top: 7px;
+
+  fa-icon {
+    font-size: 1em;
+    color: #9A9A9A;
+  }
+
+  ion-text {
+    font-size: 1em;
+    color: #9A9A9A;
+  }
+}
+
+ion-card {
+  border-radius: 12px;
+  box-shadow: 0 6px 10px -4px rgb(0 0 0 / 15%);
+  background-color: #FFFFFF;
+  color: #252422;
+  margin-bottom: 20px;
+  position: relative;
+  border: 0 none;
+  transition: transform 300ms cubic-bezier(0.34, 2, 0.6, 1), box-shadow 200ms ease;
+}

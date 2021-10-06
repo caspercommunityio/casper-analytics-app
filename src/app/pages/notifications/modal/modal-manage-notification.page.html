@@ -1,0 +1,68 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Edit your notification</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal(false)">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+  <ion-item>
+    <ion-label position="floating">Alert type</ion-label>
+    <ionic-selectable *ngIf="isNew" [(ngModel)]="selectedAlert" [items]="alerts" itemValueField="name" itemTextField="label" [canSearch]="false" (onChange)="alertChange($event)">
+    </ionic-selectable>
+    <ion-select *ngIf="!isNew" placeholder="Select an alert" [(ngModel)]="notification.condition.function" [disabled]="!isNew" class="custom-select">
+      <ion-select-option value="new_delegation">A new delegation occurs</ion-select-option>
+      <ion-select-option value="new_undelegation">A new undelegation occurs</ion-select-option>
+      <ion-select-option value="validator_down">A validator is down</ion-select-option>
+      <ion-select-option value="delegators_change">The number of delegators change</ion-select-option>
+      <ion-select-option value="casper_dump">Casper dump</ion-select-option>
+      <ion-select-option value="casper_pump">Casper pump</ion-select-option>
+      <ion-select-option value="rewards">Rewards</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item *ngIf="notification.condition.function != 'casper_dump' && notification.condition.function != 'casper_pump'">
+    <ion-label position="floating">Validator</ion-label>
+    <ionic-selectable [(ngModel)]="selectedValidator" [hasVirtualScroll]="true" [items]="validators" itemValueField="publicKey" itemTextField="publicKey" [canSearch]="true" (onChange)="validatorChange($event)">
+    </ionic-selectable>
+  </ion-item>
+  <ion-item *ngIf="notification.condition.function == 'rewards' ">
+    <ion-label position="floating">Delegator</ion-label>
+    <ionic-selectable [(ngModel)]="selectedDelegator" [hasVirtualScroll]="true" [items]="delegators" itemValueField="publicKey" itemTextField="publicKey" [canSearch]="true" (onChange)="delegatorChange($event)">
+    </ionic-selectable>
+  </ion-item>
+  <ion-item *ngIf="notification.condition.function == 'rewards'">
+    <ion-label position="floating">When</ion-label>
+    <ion-select placeholder="Select a frequence" [(ngModel)]="selectedEraWhen" class="custom-select">
+      <ion-select-option value="every_era">Every Era</ion-select-option>
+      <ion-select-option value="every_day">Every Day</ion-select-option>
+      <ion-select-option value="every_3days">Every 3 Days</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item *ngIf="notification.condition.function == 'casper_dump' || notification.condition.function == 'casper_pump'">
+    <ion-label position="floating">Percentage</ion-label>
+    <ion-select placeholder="Select a percentage" [(ngModel)]="selectedPercentage" class="custom-select">
+      <ion-select-option value="5">5%</ion-select-option>
+      <ion-select-option value="10">10%</ion-select-option>
+      <ion-select-option value="15">15%</ion-select-option>
+      <ion-select-option value="20">20%</ion-select-option>
+      <ion-select-option value="30">30%</ion-select-option>
+      <ion-select-option value="50">50%</ion-select-option>
+      <ion-select-option value="60">60%</ion-select-option>
+      <ion-select-option value="70">70%</ion-select-option>
+      <ion-select-option value="80">80%</ion-select-option>
+      <ion-select-option value="90">90%</ion-select-option>
+      <ion-select-option value="100">100%</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button expand="block" color="secondary" (click)="dismissModal(false)">Cancel</ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button expand="block" color="primary" (click)="dismissModal(true)">Save</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

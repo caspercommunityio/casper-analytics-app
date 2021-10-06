@@ -1,0 +1,55 @@
+<ngx-spinner [fullScreen]="true"></ngx-spinner>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button color="casper" autoHide="true"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Calculator</ion-title>
+    <ion-buttons slot="end">
+      <app-favorite [validator]="validator" [environment]="casperEnvironment"></app-favorite>
+      <ion-button color="casper" routerLink="/notifications">
+        <fa-icon icon="bell" slot="icon-only">
+        </fa-icon>
+      </ion-button>
+      <ion-button color="casper" routerLink="/">
+        <fa-icon icon="home" slot="icon-only">
+        </fa-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header class="ion-inherit-color ios hydrated">
+      <ion-card-title role="heading" aria-level="2">Estimate your rewards</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Enter your CSPR Amount</ion-label>
+        <ion-input type="number" [(ngModel)]="cspr"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Last APY</ion-label>
+        <ion-input type="number" [(ngModel)]="lastAPY" readonly></ion-input>
+      </ion-item>
+      <hr />
+      <ion-item>
+        <ion-label position="floating">Estimation of CSPR earned per Era</ion-label>
+        <ion-input [value]="((cspr/100)*lastAPY)/365/12" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Estimation of CSPR earned per Day</ion-label>
+        <ion-input [value]="((cspr/100)*lastAPY)/365" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Estimation of CSPR earned per Month</ion-label>
+        <ion-input [value]="(((cspr/100)*lastAPY)/365) * 30" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Estimation of CSPR earned per Year</ion-label>
+        <ion-input [value]="((cspr/100)*lastAPY)" readonly></ion-input>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

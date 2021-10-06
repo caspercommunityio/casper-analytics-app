@@ -1,0 +1,33 @@
+<ion-card>
+
+  <ion-card-content>
+    <ion-row class="content-row">
+      <ion-col size="12">
+        <ion-text class="ion-text-right property"><h1 >{{name}}</h1>
+        </ion-text>
+        <ion-text class="ion-text-right">
+          <div class="graph-container">
+            <canvas baseChart
+              [datasets]="chartData"
+              [labels]="chartLabels"
+              [options]="lineChartOptions"
+              [colors]="chartColors"
+              [legend]="lineChartLegend"
+              [chartType]="lineChartType"
+              [plugins]="lineChartPlugins">
+            </canvas>
+          </div>
+        </ion-text>
+        <hr />
+      </ion-col>
+    </ion-row>
+    <ion-row class="info-row">
+      <ion-col size="1">
+        <fa-icon [icon]="['far', 'comment']"></fa-icon>
+      </ion-col>
+      <ion-col style="text-align:left">
+        <ion-text>Over the last {{time}}, there are <b>{{averageAmount}} {{unit}}</b> per day</ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-card-content>
+</ion-card>

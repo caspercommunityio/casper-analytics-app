@@ -1,0 +1,91 @@
+<ngx-spinner [fullScreen]="true"></ngx-spinner>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button color="casper" autoHide="true"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Deployments</ion-title>
+    <ion-buttons slot="end">
+      <app-favorite [validator]="validator" [environment]="casperEnvironment"></app-favorite>
+      <ion-button color="casper" routerLink="/notifications">
+        <fa-icon icon="bell" slot="icon-only">
+        </fa-icon>
+      </ion-button>
+      <ion-button color="casper" routerLink="/">
+        <fa-icon icon="home" slot="icon-only">
+        </fa-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="">
+    <ion-card-header class="ion-inherit-color ios hydrated">
+      <ion-card-title role="heading" aria-level="2" class="ion-inherit-color ios hydrated">Most recents delegations/undelegations</ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="ios card-content-ios hydrated">
+
+      <!-- Theme classes dark, material, bootstrap -->
+      <ngx-datatable class="bootstrap" [headerHeight]="30" [scrollbarH]="true" [scrollbarV]="false" [rowHeight]="50" [footerHeight]="50" [limit]="120" [rows]="deployments" [columnMode]="'force'">
+
+
+        <ngx-datatable-column name="Date" prop="deploymentDate">
+          <ng-template ngx-datatable-header-template let-column="column">
+            <span title="Tooltip">{{column.name}}</span>
+          </ng-template>
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <div>
+              {{value}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Method" prop="method">
+          <ng-template ngx-datatable-header-template let-column="column">
+            <span title="Tooltip">{{column.name}}</span>
+          </ng-template>
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <div>
+              {{value}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Delegator" prop="delegator">
+          <ng-template ngx-datatable-header-template let-column="column">
+            <span title="Tooltip">{{column.name}}</span>
+          </ng-template>
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <div>
+              {{value.substr(0,5)+'...'+value.substr(-5)}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Validator" prop="validator">
+          <ng-template ngx-datatable-header-template let-column="column">
+            <span title="Tooltip">{{column.name}}</span>
+          </ng-template>
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <div>
+              {{value.substr(0,5)+'...'+value.substr(-5)}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Amount" prop="amount">
+          <ng-template ngx-datatable-header-template let-column="column">
+            <span  title="Tooltip"><div style="text-align:right;padding-right:50px;">
+              {{column.name}}
+              </div>
+              </span>
+          </ng-template>
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <div style="text-align:right;padding-right:50px;">
+              {{value | number:'1.2-2':'fr'}} CSPR
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-footer></ngx-datatable-footer>
+      </ngx-datatable>
+
+    </ion-card-content>
+  </ion-card>
+</ion-content>

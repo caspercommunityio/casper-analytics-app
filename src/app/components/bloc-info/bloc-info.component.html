@@ -1,0 +1,32 @@
+<ion-card>
+  <ion-card-content>
+    <ion-row class="content-row">
+      <ion-col class="col-icon" size="3">
+        <fa-icon [style.color]="iconColor" [icon]="icon"></fa-icon>
+      </ion-col>
+      <ion-col size="9">
+        <ion-text class="ion-text-right property"><h1 >{{name}}</h1>
+        </ion-text>
+        <ion-text class="ion-text-right">
+          <div *ngIf="value.length == 66" class="value">
+            <a routerLink="/dashboard/{{value}}">
+              {{value.substr(0,5) + '...' + value.substr(-5)}}
+            </a>
+          </div>
+          <div *ngIf="value.length != 66" class="value">
+            {{value}}
+          </div>
+        </ion-text>
+        <hr />
+      </ion-col>
+    </ion-row>
+    <ion-row class="info-row">
+      <ion-col size="1">
+        <fa-icon [icon]="['far', 'comment']"></fa-icon>
+      </ion-col>
+      <ion-col style="text-align:left">
+        <ion-text>{{info}}</ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-card-content>
+</ion-card>

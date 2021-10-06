@@ -1,0 +1,22 @@
+.align-center {
+  text-align: center;
+  background-color: red !important;
+}
+
+a:hover {
+  color: #66615B !important;
+}
+
+a {
+  color: #66615B !important;
+}
+
+.contract-info {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+
+  img {
+    margin-right: 5px;
+  }
+}

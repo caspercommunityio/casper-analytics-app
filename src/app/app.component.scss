@@ -1,0 +1,42 @@
+ion-item {
+  color: #66615B;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  fa-icon {
+    font-size: 25px;
+    margin-right: 20px;
+  }
+}
+
+.selected-menu {
+  color: var(--ion-color-casper);
+  font-weight: bold;
+
+  .triangle:after,
+  .triangle:before {
+    content: '';
+    display: block;
+    position: absolute;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+  }
+
+  .triangle:after {
+    top: 7px;
+    border-color: transparent #f4f3ef transparent transparent;
+    border-width: 16px;
+  }
+
+  .triangle:before {
+    top: 6px;
+    border-color: transparent lightgray transparent transparent;
+    border-width: 17px;
+  }
+}
+
+.paddingTopMobile {
+  padding-top: 75px;
+}

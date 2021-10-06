@@ -1,0 +1,229 @@
+<ngx-spinner [fullScreen]="true"></ngx-spinner>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button color="casper" autoHide="true"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Validator</ion-title>
+    <ion-buttons slot="end">
+      <app-favorite [validator]="validator" [environment]="casperEnvironment"></app-favorite>
+      <ion-button color="casper" routerLink="/notifications">
+        <fa-icon icon="bell" slot="icon-only">
+        </fa-icon>
+      </ion-button>
+      <ion-button color="casper" routerLink="/">
+        <fa-icon icon="home" slot="icon-only">
+        </fa-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+    <ion-row *ngIf="validatorInfos !== undefined">
+      <swiper style="width:100%" pager="false" [config]="slideOptions">
+        <ng-template swiperSlide>
+          <app-bloc-info style="width:100%" name="Position" [value]="validatorInfos.currentPosition" icon="sort-numeric-down" iconColor="#badc58" [info]="'Of ' + validatorInfos.currentTotalValidators + ' Validators'"></app-bloc-info>
+        </ng-template>
+        <ng-template swiperSlide>
+          <app-bloc-info style="width:100%" name="Total Of CSPR Staked" [value]="validatorInfos.currentCsprStaked | number:'1.2-2':'fr'" icon="university" iconColor="#fbc658" [info]="'At Era ' + validatorInfos.currentEra"></app-bloc-info>
+        </ng-template>
+        <ng-template swiperSlide>
+          <app-bloc-info style="width:100%" name="APY" [value]="(validatorInfos.previousAPY  | number:'1.2-2':'fr') + '%'" [icon]="['far','calendar']" iconColor="#ef8157" [info]="'Based on Era ' + validatorInfos.previousEra"></app-bloc-info>
+        </ng-template>
+        <ng-template swiperSlide>
+          <app-bloc-info style="width:100%" name="Delegators" [value]="validatorInfos.currentDelegators" icon="users" iconColor="#51cbce" info="Actual number of delegators"></app-bloc-info>
+        </ng-template>
+      </swiper>
+
+      <swiper style="width:100%" pager="false" [config]="slideOptions">
+        <ng-template swiperSlide>
+          <app-bloc-info style="width:100%" name="Fees" [value]="validatorInfos.currentDelegationRate + '%'" [icon]="['far','credit-card']" iconColor="#6bd098" info="% the node takes on your rewards"></app-bloc-info>
+        </ng-template>
+        <ng-template swiperSlide>
+          <app-bloc-info style="width:100%" name="# of delegations" [value]="validatorInfos.totalDelegateLastWeek " [icon]="['far','plus-square']" iconColor="#30336b" info="Based on the last 7 days"></app-bloc-info>
+        </ng-template>
+        <ng-template swiperSlide>
+          <app-bloc-info style="width:100%" name="# of undelegations" [value]="validatorInfos.totalUndelegateLastWeek" [icon]="['far','minus-square']" iconColor="#95afc0" info="Based on the last 7 days"></app-bloc-info>
+        </ng-template>
+        <ng-template swiperSlide>
+          <app-bloc-info style="width:100%" name="# of eras treated" [value]="validatorInfos.erasProcessed" icon="sync" iconColor="#be2edd" info="# of eras since the validator is active"></app-bloc-info>
+        </ng-template>
+      </swiper>
+
+
+    </ion-row>
+    <ion-row *ngIf="validatorInfos !== undefined && validatorInfos.messages.length > 0">
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>Messages</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ul>
+              <li *ngFor="let message of validatorInfos.messages">
+                Era {{message.eraId}} : {{message.message}}
+              </li>
+            </ul>
+            <app-card-info text="Informations about the charts"></app-card-info>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>APY's Evolution</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="graph-container">
+              <canvas *ngIf="apyChartData != undefined" baseChart
+                [datasets]="apyChartData"
+                [labels]="apyChartLabels"
+                [options]="lineChartOptions"
+                [colors]="apyChartColors"
+                [legend]="lineChartLegend"
+                [chartType]="lineChartType"
+                [plugins]="lineChartPlugins">
+              </canvas>
+            </div>
+            <app-card-info text="Chart of the APY over the time"></app-card-info>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>Total CSPR Staked's Evolution</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="graph-container">
+              <canvas *ngIf="totalCSPRChartData != undefined" baseChart
+                [datasets]="totalCSPRChartData"
+                [labels]="totalCSPRChartLabels"
+                [options]="lineChartOptions"
+                [colors]="totalCSPRChartColors"
+                [legend]="lineChartLegend"
+                [chartType]="lineChartType"
+                [plugins]="lineChartPlugins">
+              </canvas>
+            </div>
+            <app-card-info text="Chart of staked token over the time"></app-card-info>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>Delegators's Evolution</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="graph-container">
+              <canvas *ngIf="delegatorsChartData != undefined" baseChart
+                [datasets]="delegatorsChartData"
+                [labels]="delegatorsChartLabels"
+                [options]="lineChartOptions"
+                [colors]="delegatorsChartColors"
+                [legend]="lineChartLegend"
+                [chartType]="lineChartType"
+                [plugins]="lineChartPlugins">
+              </canvas></div>
+            <app-card-info text="Chart of the number of delegators over the time"></app-card-info>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>Rewards's Evolution</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="graph-container">
+
+              <canvas *ngIf="rewardsChartData != undefined" baseChart
+                [datasets]="rewardsChartData"
+                [labels]="rewardsChartLabels"
+                [options]="lineChartOptions"
+                [colors]="rewardsChartColors"
+                [legend]="lineChartLegend"
+                [chartType]="lineChartType"
+                [plugins]="lineChartPlugins">
+              </canvas>
+            </div>
+            <app-card-info text="Chart of the rewards over the time"></app-card-info>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>Delegation rate's Evolution</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="graph-container">
+
+              <canvas *ngIf="feesChartData != undefined" baseChart
+                [datasets]="feesChartData"
+                [labels]="feesChartLabels"
+                [options]="lineChartOptions"
+                [colors]="feesChartColors"
+                [legend]="lineChartLegend"
+                [chartType]="lineChartType"
+                [plugins]="lineChartPlugins">
+              </canvas>
+            </div>
+            <app-card-info text="Chart of the rewards over the time"></app-card-info>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>Delegations's Evolution</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="graph-container">
+              <canvas *ngIf="delegationsChartData != undefined" baseChart
+                [datasets]="delegationsChartData"
+                [labels]="delegationsChartLabels"
+                [options]="lineChartOptions"
+                [colors]="delegationsChartColors"
+                [legend]="lineChartLegend"
+                [chartType]="lineChartType"
+                [plugins]="lineChartPlugins">
+              </canvas></div>
+            <app-card-info text="Based on the last 12 days"></app-card-info>
+
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>Undelegations's Evolution</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="graph-container">
+
+              <canvas *ngIf="undelegationsChartData != undefined" baseChart
+                [datasets]="undelegationsChartData"
+                [labels]="undelegationsChartLabels"
+                [options]="lineChartOptions"
+                [colors]="undelegationsChartColors"
+                [legend]="lineChartLegend"
+                [chartType]="lineChartType"
+                [plugins]="lineChartPlugins">
+              </canvas>
+            </div>
+            <app-card-info text="Based on the last 12 days"></app-card-info>
+
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

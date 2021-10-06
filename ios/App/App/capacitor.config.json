@@ -1,0 +1,15 @@
+{
+	"appId": "io.caspercommunity.analytics",
+	"appName": "Casper Analytics",
+	"webDir": "www",
+	"bundledWebRuntime": false,
+	"plugins": {
+		"PushNotifications": {
+			"presentationOptions": [
+				"badge",
+				"sound",
+				"alert"
+			]
+		}
+	}
+}
