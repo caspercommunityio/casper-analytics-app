@@ -19,6 +19,8 @@ export class NotificationsPage implements OnInit {
 
   isNotificationEnabled = true;
 
+  intervalSubscription: any = undefined;
+
   bgColors = {
     "new_delegation": "#badc58",
     "validator_down": "#fbc658",
@@ -65,7 +67,7 @@ export class NotificationsPage implements OnInit {
     })
     this.spinner.show();
     //Delay to run the request to be sure that we get the notification token
-    interval(3000).pipe(
+    this.intervalSubscription = interval(3000).pipe(
       mergeMap(() => this.casper.getNotificationToken()),
       map((token) => {
         if (token === null) {
@@ -159,6 +161,13 @@ export class NotificationsPage implements OnInit {
       duration: 2000
     });
     toast.present();
+  }
+
+  clearSubscriptions() {
+    console.log("unsubscribe");
+    if (this.intervalSubscription !== undefined) {
+      this.intervalSubscription.unsubscribe();
+    }
   }
 
 }

@@ -9,7 +9,7 @@ import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 })
 export class ChartInfoComponent implements OnInit {
   @Input() name: any = 'My Protperty';
-  @Input() data: any = 'Value';
+  @Input() data: any = [];
   @Input() color: any = 'red';
   @Input() unit = '';
   @Input() time = '7d';
