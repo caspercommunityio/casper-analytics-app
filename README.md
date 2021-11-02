@@ -121,6 +121,14 @@ ionic serve
 ionic build --prod
 ```
 
+## How to test
+
+Run the following command :
+
+```
+ng test
+```
+
 ## iOS Application
 
 The iOS application is ready to use. The only thing that you have to do is adding the GoogleService-Info.plist for the notifications via XCode.
