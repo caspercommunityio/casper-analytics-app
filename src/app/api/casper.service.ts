@@ -11,6 +11,11 @@ export class CasperService {
 
   endpoint = environment.analyticsCasperApiUrl;
 
+  delegationContract = environment.mainnetDelegationContract;
+  delegationUrl = environment.mainnetDelegationUrl;
+
+
+
   notificationToken: any = null;
   casperEnvironment: String = "mainnet";
 
@@ -19,6 +24,8 @@ export class CasperService {
   setCasperEnvironment(casperEnvironment: String) {
     this.casperEnvironment = casperEnvironment;
     this.endpoint = (this.casperEnvironment == 'testnet' ? environment.analyticsTestnetCasperApiUrl : this.endpoint = environment.analyticsCasperApiUrl)
+    this.delegationUrl = (this.casperEnvironment == 'testnet' ? environment.testnetDelegationUrl : this.endpoint = environment.mainnetDelegationUrl)
+    this.delegationContract = (this.casperEnvironment == 'testnet' ? environment.testnetDelegationContract : this.endpoint = environment.mainnetDelegationContract)
   }
 
   getCasperEnvironment() {
@@ -85,5 +92,15 @@ export class CasperService {
 
   postRegisterToken(notificationToken: any) {
     return this.httpClient.post<any[]>(this.endpoint + "notification/register-token", { notificationToken: notificationToken });
+  }
+
+  getDelegationContract() {
+    return this.delegationContract;
+  }
+  getDelegationUrl() {
+    return this.delegationUrl;
+  }
+  getDelegationEnvironment() {
+    return (this.casperEnvironment == 'testnet' ? 'casper-test' : 'casper')
   }
 }

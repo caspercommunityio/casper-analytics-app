@@ -43,6 +43,12 @@ export class AppComponent {
     });
   }
 
+  public isBrowser() {
+    return (this.platform.is('desktop') || this.platform.is('mobileweb') || this.platform.is('pwa'));
+  }
+
+
+
   refreshMenu() {
     this.appPages = [
       { title: 'Dashboard', url: '/dashboard/' + this.selectedValidator },

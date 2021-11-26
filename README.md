@@ -16,6 +16,9 @@ npm install -g @ionic/cli
 cd /path/to/project
 npm install
 ```
+Note for the "casper-js-sdk", we have submitted a PR (https://github.com/casper-ecosystem/casper-js-sdk/pull/121) which is not yet include in the last release.
+In order to test the app correctly, you have to use this repository and compile it.
+https://github.com/caspercommunityio/casper-js-sdk
 
 ### Environment settings
 
@@ -28,7 +31,11 @@ export const environment = {
   analyticsCasperApiUrl: 'https://api.caspercommunity.io/',
   analyticsTestnetCasperApiUrl: 'https://testnet.api.caspercommunity.io/',
   contactUsUrl: 'https://caspercommunity.io/contact-us',
- mapId : '',
+  testnetDelegationContract: "93d923e336b20a4c4ca14d592b60e5bd3fe330775618290104f9beb326db7ae2",
+  testnetDelegationUrl: "http://peer.ip:port/rpc",
+  mainnetDelegationContract: "ccb576d6ce6dec84a551e48f0d0b7af89ddba44c7390b690036257a04a3ae9ea",
+  mainnetDelegationUrl: "http://peer.ip:port/rpc",
+  mapId : '',
 firebaseWebNotifications: {
     apiKey: "",
     authDomain: "",

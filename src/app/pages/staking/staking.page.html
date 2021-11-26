@@ -1,0 +1,56 @@
+<ngx-spinner [fullScreen]="true"></ngx-spinner>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button color="casper" autoHide="true"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Stake with us</ion-title>
+    <ion-buttons slot="end">
+      <app-favorite [validator]="validator" [environment]="casperEnvironment"></app-favorite>
+      <ion-button color="casper" routerLink="/notifications">
+        <fa-icon icon="bell" slot="icon-only">
+        </fa-icon>
+      </ion-button>
+      <ion-button color="casper" routerLink="/">
+        <fa-icon icon="home" slot="icon-only">
+        </fa-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <ion-card-header class="ion-inherit-color ios hydrated">
+      <ion-card-title role="heading" aria-level="2">Stake your CSPR</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>
+        First connect to the signer and choose an account to start delegating.<br />
+        Then specify the amount you want to delegate and click on "Delegate".
+      </p>
+      <ion-button color="casper" (click)="connectToSigner()" [disabled]="signerStatus.isUnlocked">
+        Connect to Signer
+      </ion-button>
+      <ion-item>
+        <ion-label position="floating">Validator</ion-label>
+        <ion-input type="text" [(ngModel)]="validator" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Account</ion-label>
+        <ion-input type="text" [(ngModel)]="signerStatus.activeKey" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Current Balance</ion-label>
+        <ion-input type="number" [(ngModel)]="signerStatus.balance" readonly></ion-input>
+      </ion-item>
+      <hr />
+      <ion-item>
+        <ion-label position="floating">Delegate Amount</ion-label>
+        <ion-input type="number" [(ngModel)]="amount"></ion-input>
+      </ion-item>
+      <ion-button color="casper" (click)="delegate()">
+        Delegate
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

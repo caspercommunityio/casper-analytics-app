@@ -38,6 +38,10 @@ const routes: Routes = [
   {
     path: 'infos',
     loadChildren: () => import('./pages/infos/infos.module').then(m => m.InfosPageModule)
+  },
+  {
+    path: 'staking/:validator',
+    loadChildren: () => import('./pages/staking/staking.module').then(m => m.StakingPageModule)
   }
 ];
 
